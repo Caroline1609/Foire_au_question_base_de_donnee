@@ -1,7 +1,12 @@
-CREATE DATABASE IF NOT EXISTS foire_question;
+DROP DATABASE db_mini_faq;
 
+
+
+CREATE DATABASE IF NOT EXISTS db_mini_faq;
 
 USE db_mini_faq;
+
+
 
 CREATE TABLE User_(
    id_user INT AUTO_INCREMENT,
@@ -37,3 +42,5 @@ CREATE TABLE Contient(
    FOREIGN KEY(question_id) REFERENCES Question(question_id),
    FOREIGN KEY(category_name) REFERENCES Category(category_name)
 );
+
+
