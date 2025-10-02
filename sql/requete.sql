@@ -3,13 +3,11 @@
 SELECT id_user, user_lastname, user_firstname, user_email
 FROM User_;
 
-
 /*Sélectionner toutes les questions (date, intitulé, réponse, identifiant utilisateur) triées par date de la plus ancienne à la plus récente.*/
 
 SELECT question_date, question_label, question_response, id_user
 FROM Question
 ORDER BY question_date ASC;
-
 
 /*Sélectionner les questions (identifiant, date, intitulé, réponse) de l’utilisateur n°2.*/
 
