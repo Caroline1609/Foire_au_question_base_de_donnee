@@ -1,3 +1,6 @@
+CREATE DATABASE IF NOT EXISTS foire_question;
+
+
 USE db_mini_faq;
 
 CREATE TABLE User_(
