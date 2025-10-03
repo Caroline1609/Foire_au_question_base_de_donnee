@@ -35,8 +35,22 @@ ORDER BY question_label DESC;
 
 SELECT category_nom, category_description
 FROM Category
-INNER JOIN Contient ON Category.category_name = Contient.category_name
+INNER JOIN Contient ON Category.category_name = Contient.category_name;
+
 
 /*Sélectionner les questions triées par titre (ordre alphabétique) avec le nom et prénom de l’auteur (nécessite une jointure).*/
 
+SELECT question_id, question_date, question_label, question_response, user_lastname, user_firstname
+FROM Question
+INNER JOIN User_ ON Question.id_user = User_.id_user
+ORDER BY Question.question_label ASC;
+
+
 /*Sélectionner les catégories (nom) avec, pour chaque catégorie le nombre de questions associées (nécessite une jointure).*/
+
+SELECT Category.category_name AS 'Nom de la catégorie', COUNT(Contient.question_id) AS 'nombre de questions lier'
+FROM Category
+LEFT JOIN Contient ON Category.category_name = Contient.category_name
+GROUP BY Category.category_name;
+
+
