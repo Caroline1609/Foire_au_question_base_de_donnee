@@ -1,56 +1,51 @@
-/* Sélectionner tous les utilisateurs (identifiant, nom, prénom, email). */
+USE db_exo_foire_aux_questions;
 
-SELECT id_user, user_lastname, user_firstname, user_email
-FROM User_;
+-- 1. Sélectionner tous les utilisateurs (identifiant, nom, prénom, email).
+SELECT user_id, user_lastname, user_firstname, user_email 
+FROM t_user;
 
-/*Sélectionner toutes les questions (date, intitulé, réponse, identifiant utilisateur) triées par date de la plus ancienne à la plus récente.*/
-
-SELECT question_date, question_label, question_response, id_user
-FROM Question
+-- 2. Sélectionner toutes les questions (date, intitulé, réponse, identifiant utilisateur)
+-- triées par date de la plus ancienne à la plus récente.
+SELECT question_date, question_label, question_reponse, user_id 
+FROM question 
 ORDER BY question_date ASC;
 
-/*Sélectionner les questions (identifiant, date, intitulé, réponse) de l’utilisateur n°2.*/
+-- 3. Sélectionner les questions (identifiant, date, intitulé, réponse) de l’utilisateur n°2.
+SELECT question_id, question_date, question_label, question_reponse
+FROM question 
+WHERE user_id = 2;
 
-SELECT question_id, question_date, question_label, question_response
-FROM Question
-WHERE id_user = 2;
+-- 4. Sélectionner les questions (date, intitulé, réponse, identifiant utilisateur) de l’utilisateur Eva Satiti.
+SELECT question.question_date, question.question_label, question.question_reponse, question.user_id
+FROM question
+JOIN t_user ON question.user_id = t_user.user_id
+WHERE t_user.user_lastname = 'Satiti' AND t_user.user_firstname = 'Eva';
 
-/*Sélectionner les questions (date, intitulé, réponse, identifiant utilisateur) de l’utilisateur Eva Satiti.*/
-
-SELECT question_id, question_date, question_label, question_response
-FROM Question
-INNER JOIN User_ ON Question.id_user = User_.id_user
-WHERE User_.user_lastname = 'Satiti' AND User_.user_firstname = 'Eva';
-
-
-/*Sélectionner les questions (identifiant, date, intitulé, réponse, identifiant utilisateur) dont l’intitulé contient “SQL”. Le résultat est trié par le titre et par ordre décroissant.*/
-
-SELECT question_id, question_date, question_label, question_response, id_user
-FROM Question
+-- 5. Sélectionner les questions (identifiant, date, intitulé, réponse, identifiant utilisateur)
+-- dont l’intitulé contient “SQL”. Le résultat est trié par le titre et par ordre décroissant.
+SELECT question_id, question_date, question_label, question_reponse, user_id
+FROM question 
 WHERE question_label LIKE '%SQL%'
 ORDER BY question_label DESC;
 
+-- 6. Sélectionner les catégories (nom, description) sans question associée.
+SELECT category.category_name, category.category_description
+FROM category
+LEFT JOIN contenir ON category.category_name = contenir.category_name
+WHERE contenir.question_id IS NULL;
 
-/*Sélectionner les catégories (nom, description) sans question associée.*/
+-- 7. Sélectionner les questions triées par titre (ordre alphabétique) 
+-- avec le nom et prénom de l’auteur (nécessite une jointure).
+SELECT question.question_id, question.question_date, question.question_label, question.question_reponse,
+       t_user.user_lastname, t_user.user_firstname
+FROM question
+INNER JOIN t_user ON question.user_id = t_user.user_id
+ORDER BY question.question_label ASC;
 
-SELECT category_nom, category_description
-FROM Category
-INNER JOIN Contient ON Category.category_name = Contient.category_name;
-
-
-/*Sélectionner les questions triées par titre (ordre alphabétique) avec le nom et prénom de l’auteur (nécessite une jointure).*/
-
-SELECT question_id, question_date, question_label, question_response, user_lastname, user_firstname
-FROM Question
-INNER JOIN User_ ON Question.id_user = User_.id_user
-ORDER BY Question.question_label ASC;
-
-
-/*Sélectionner les catégories (nom) avec, pour chaque catégorie le nombre de questions associées (nécessite une jointure).*/
-
-SELECT Category.category_name AS 'Nom de la catégorie', COUNT(Contient.question_id) AS 'nombre de questions lier'
-FROM Category
-LEFT JOIN Contient ON Category.category_name = Contient.category_name
-GROUP BY Category.category_name;
-
+-- 8. Sélectionner les catégories (nom) avec, pour chaque catégorie, le nombre de questions associées.
+SELECT category.category_name AS 'Nom de la catégorie',
+       COUNT(contenir.question_id) AS 'Nombre de questions liées'
+FROM category
+LEFT JOIN contenir ON category.category_name = contenir.category_name
+GROUP BY category.category_name;
 
